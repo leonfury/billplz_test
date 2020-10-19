@@ -73,25 +73,25 @@ class WelcomesController < ApplicationController
     end
 
     def payment_response_success
-        req = Faraday.new do |f|
-            f.adapter :net_http
-        end
+        # req = Faraday.new do |f|
+        #     f.adapter :net_http
+        # end
 
-        @req = req.get(
-            "https://www.billplz-sandbox.com/api/v3/bills/#{@payment.billplz_id}", 
-            {},
-            {
-                "Authorization" => "Basic #{Base64.encode64('8a2ab22b-6bea-41ac-a132-10ad130a5712:').chomp}",
-                "Content-Type" => "application/json"
-            }
-        )
+        # @req = req.get(
+        #     "https://www.billplz-sandbox.com/api/v3/bills/#{@payment.billplz_id}", 
+        #     {},
+        #     {
+        #         "Authorization" => "Basic #{Base64.encode64('8a2ab22b-6bea-41ac-a132-10ad130a5712:').chomp}",
+        #         "Content-Type" => "application/json"
+        #     }
+        # )
 
-        if @req.status == 200
-            @req_body = JSON.parse(@req.body)
-        else
-            flash[:error] = "SOMETHING WENT WRONG!"
-            redirect_to root_path
-        end
+        # if @req.status == 200
+        #     @req_body = JSON.parse(@req.body)
+        # else
+        #     flash[:error] = "SOMETHING WENT WRONG!"
+        #     redirect_to root_path
+        # end
     end
 
     def payment_response_fail
