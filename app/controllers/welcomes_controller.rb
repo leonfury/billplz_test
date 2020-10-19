@@ -22,8 +22,8 @@ class WelcomesController < ApplicationController
                 "name": "Leon",
                 "amount": 200,
                 "description": "TEST.",
-                "callback_url": "/await_payment_response_backend/#{@payment.id}",
-                "redirect_url": "/await_payment_response/#{@payment.id}",
+                "callback_url": "https://billplz-test.herokuapp.com/await_payment_response_backend/#{@payment.id}",
+                "redirect_url": "https://billplz-test.herokuapp.com/await_payment_response/#{@payment.id}",
             }.to_json,
             {
                 "Authorization" => "Basic #{Base64.encode64('8a2ab22b-6bea-41ac-a132-10ad130a5712:').chomp}",
