@@ -47,8 +47,14 @@ class WelcomesController < ApplicationController
         @payment.update(details: params)
         p "INCOMING REQUEST ==================================================="
         p @payment
+        p params["paid"]
         p params
-        p params["billplz"]["paid"]
+
+        if params["paid"] == "true"
+            @payment.update(payment_status: "success")
+        elsif params["paid"] == "false"
+            @payment.update(payment_status: "failure")
+        end
     end
 
     def await_payment_response
