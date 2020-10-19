@@ -45,6 +45,8 @@ class WelcomesController < ApplicationController
     def await_payment_response_backend
         @payment.update(details: params)
         p "INCOMING REQUEST ==================================================="
+        p @payment
+        p params
         p params["billplz"]["paid"]
     end
 
@@ -76,7 +78,6 @@ class WelcomesController < ApplicationController
                 "Content-Type" => "application/json"
             }
         )
-        puts @req.body
 
         if @req.status == 200
             @req_body = JSON.parse(@req.body)
