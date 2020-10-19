@@ -35,6 +35,7 @@ class WelcomesController < ApplicationController
         if req.status == 200
             server_resp = JSON.parse(req.body)
             @payment.update(billplz_id: server_resp["id"])
+            redirect_to server_resp["url"]
         else
             flash[:error] = "SOMETHING WENT WRONG!"
             redirect_to root_path
