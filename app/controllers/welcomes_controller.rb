@@ -9,7 +9,7 @@ class WelcomesController < ApplicationController
     end
 
     def make_payment
-        @payment.create()
+        @payment = Payment.create()
         req = Faraday.new do |f|
             f.adapter :net_http
         end
