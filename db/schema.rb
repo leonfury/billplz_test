@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_10_16_012539) do
   create_table "payments", force: :cascade do |t|
     t.integer "payment_status", default: 0, null: false
     t.string "billplz_id"
+    t.string "x_signature"
     t.text "details"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

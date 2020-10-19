@@ -1,6 +1,7 @@
 class WelcomesController < ApplicationController
     require 'net/http'
     before_action :set_payment, except: [:index, :checkout_page, :make_payment]
+    skip_before_action :verify_authenticity_token, :only => [:await_payment_response_backend]
 
     def index        
     end
@@ -34,7 +35,7 @@ class WelcomesController < ApplicationController
 
         if req.status == 200
             server_resp = JSON.parse(req.body)
-            @payment.update(billplz_id: server_resp["id"])
+            @payment.update(billplz_id: server_resp["id"], x_signature: server_resp["x_signature"])
             redirect_to server_resp["url"]
         else
             flash[:error] = "SOMETHING WENT WRONG!"
