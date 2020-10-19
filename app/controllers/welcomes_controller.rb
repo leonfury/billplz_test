@@ -16,7 +16,7 @@ class WelcomesController < ApplicationController
         end
 
         req = req.post(
-            "https://www.billplz-sandbox.com/api/v3/bills?auto_submit=true", 
+            "#{api_url}api/v3/bills?auto_submit=true", 
             {
                 "collection_id": "g3ttovrw",
                 "email": "kliwaru@gmail.com",
@@ -27,7 +27,7 @@ class WelcomesController < ApplicationController
                 "redirect_url": "https://billplz-test.herokuapp.com/await_payment_response/#{@payment.id}",
             }.to_json,
             {
-                "Authorization" => "Basic #{Base64.encode64('8a2ab22b-6bea-41ac-a132-10ad130a5712:').chomp}",
+                "Authorization" => "Basic #{Base64.encode64(api_key).chomp}",
                 "Content-Type" => "application/json"
             }
         )
@@ -77,6 +77,16 @@ class WelcomesController < ApplicationController
     private
     def set_payment
         @payment = Payment.find(params[:id])
+    end
+
+    def set_api
+        # SANDBOX
+        # api_url = "https://www.billplz-sandbox.com/"
+        # api_key = "8a2ab22b-6bea-41ac-a132-10ad130a5712:"
+
+        # ACTUAL
+        api_url = "https://www.billplz.com/"
+        api_key = "23da4a59-3b63-4823-b1a5-e04eb906511a:"
     end
 end
 
