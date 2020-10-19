@@ -32,7 +32,6 @@ class WelcomesController < ApplicationController
                 "Content-Type" => "application/json"
             }
         )
-        puts req.status
 
         if req.status == 200
             server_resp = JSON.parse(req.body)
@@ -44,13 +43,9 @@ class WelcomesController < ApplicationController
         end
     end
 
-    def await_payment_response_backend
+    # callback_url from billplz
+    def await_payment_response_backend 
         @payment.update(details: params)
-        p "INCOMING REQUEST ==================================================="
-        p @payment
-        p params["paid"]
-        p params
-
         if params["paid"] == "true"
             @payment.update(payment_status: "success")
         elsif params["paid"] == "false"
@@ -58,21 +53,19 @@ class WelcomesController < ApplicationController
         end
     end
 
+    # redirect url
     def await_payment_response
     end
 
+    # from frontend AJAX
     def check_payment_status
-        render :json => {
-            status: @payment.payment_status
-        }
+        render :json => { status: @payment.payment_status }
     end
 
     def payment_response_success
-        
     end
 
     def payment_response_fail
-
     end
     
     private
@@ -81,13 +74,8 @@ class WelcomesController < ApplicationController
     end
 
     def set_api
-        # SANDBOX
-        # @api_url = "https://www.billplz-sandbox.com/"
-        # api_key = "8a2ab22b-6bea-41ac-a132-10ad130a5712:"
-
-        # ACTUAL
-        @api_url = "https://www.billplz.com/"
-        @api_key = "23da4a59-3b63-4823-b1a5-e04eb906511a:"
-        @collection_id = "xpr5zauh"
+        @api_url = "https://www.billplz-sandbox.com/"
+        @api_key = "8a2ab22b-6bea-41ac-a132-10ad130a5712:"
+        @collection_id ="g3ttovrw"
     end
 end
