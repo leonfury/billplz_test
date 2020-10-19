@@ -43,9 +43,9 @@ class WelcomesController < ApplicationController
     end
 
     def await_payment_response_backend
-        puts "INCOMING REQUEST"
-        puts @payment
-        puts params
+        @payment.update(details: params)
+        p "INCOMING REQUEST ==================================================="
+        p params["billplz"]["paid"]
     end
 
     def await_payment_response
