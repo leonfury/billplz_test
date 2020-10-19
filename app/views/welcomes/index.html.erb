@@ -20,9 +20,19 @@
 </p>
 
 <p>
-    <strong>User clicks "Make Payment"</strong>
+    <strong>User "Makes Payment" w Billplz</strong>
     <br>POST welcomes#make_payment with payment.id
     <br>Controller makes API call via Faraday
+</p>
+
+<p>
+    <strong>Billplz Tries to reach NN Backend</strong>
+    <br>GET welcomes#await_payment_response_backend
+</p>
+
+<p>
+    <strong>User redirected to "Await payment response" page</strong>
+    <br>GET welcomes#await_payment_response to update bill payment status
     <br>on page load, Recursive JS runs AJAX to check backend of payment status update to determine redirect
     <br>AJAX Calls to welcomes#check_payment_status
 </p>

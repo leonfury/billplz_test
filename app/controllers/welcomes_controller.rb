@@ -9,6 +9,7 @@ class WelcomesController < ApplicationController
     end
 
     def make_payment
+        @payment.create()
         req = Faraday.new do |f|
             f.adapter :net_http
         end
@@ -33,7 +34,7 @@ class WelcomesController < ApplicationController
 
         if req.status == 200
             server_resp = JSON.parse(req.body)
-            @payment.create(billplz_id: server_resp["id"])
+            @payment.update(billplz_id: server_resp["id"])
         else
             flash[:error] = "SOMETHING WENT WRONG!"
             redirect_to root_path
