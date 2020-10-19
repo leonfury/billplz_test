@@ -17,9 +17,9 @@ class WelcomesController < ApplicationController
         end
 
         req = req.post(
-            "#{api_url}api/v3/bills?auto_submit=true", 
+            "#{@api_url}api/v3/bills?auto_submit=true", 
             {
-                "collection_id": "g3ttovrw",
+                "collection_id": @collection_id,
                 "email": "kliwaru@gmail.com",
                 "name": "Leon",
                 "amount": 200,
@@ -28,7 +28,7 @@ class WelcomesController < ApplicationController
                 "redirect_url": "https://billplz-test.herokuapp.com/await_payment_response/#{@payment.id}",
             }.to_json,
             {
-                "Authorization" => "Basic #{Base64.encode64(api_key).chomp}",
+                "Authorization" => "Basic #{Base64.encode64(@api_key).chomp}",
                 "Content-Type" => "application/json"
             }
         )
@@ -82,31 +82,12 @@ class WelcomesController < ApplicationController
 
     def set_api
         # SANDBOX
-        # api_url = "https://www.billplz-sandbox.com/"
+        # @api_url = "https://www.billplz-sandbox.com/"
         # api_key = "8a2ab22b-6bea-41ac-a132-10ad130a5712:"
 
         # ACTUAL
-        api_url = "https://www.billplz.com/"
-        api_key = "23da4a59-3b63-4823-b1a5-e04eb906511a:"
+        @api_url = "https://www.billplz.com/"
+        @api_key = "23da4a59-3b63-4823-b1a5-e04eb906511a:"
+        @collection_id = "xpr5zauh"
     end
 end
-
-# req = Faraday.new do |f|
-#     f.adapter :net_http
-# end
-
-# @req = req.get(
-#     "https://www.billplz-sandbox.com/api/v3/bills/#{@payment.billplz_id}", 
-#     {},
-#     {
-#         "Authorization" => "Basic #{Base64.encode64('8a2ab22b-6bea-41ac-a132-10ad130a5712:').chomp}",
-#         "Content-Type" => "application/json"
-#     }
-# )
-
-# if @req.status == 200
-#     @req_body = JSON.parse(@req.body)
-# else
-#     flash[:error] = "SOMETHING WENT WRONG!"
-#     redirect_to root_path
-# end
