@@ -38,18 +38,16 @@ class WelcomesController < ApplicationController
             @payment.update(billplz_id: server_resp["id"])
             redirect_to server_resp["url"]
         else
-            flash[:error] = "SOMETHING WENT WRONG!"
+            notice = "SOMETHING WENT WRONG!"
             redirect_to root_path
         end
     end
 
-    # callback_url from billplz
+    # callback_url for billplz
     def await_payment_response_backend 
         @payment.update(details: params)
         if params["paid"] == "true"
             @payment.update(payment_status: "success")
-        elsif params["paid"] == "false"
-            @payment.update(payment_status: "failure")
         end
     end
 
