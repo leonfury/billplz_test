@@ -13,3 +13,11 @@
  *= require_tree .
  *= require_self
  */
+
+.d-none { display: none; }
+
+.two.columns { display: flex; }
+
+.two.columns div { border-right: 1px solid black; padding: 0 1em; }
+.two.columns div:first-child { padding-left: 0; }
+.two.columns div:last-child { border: none; }

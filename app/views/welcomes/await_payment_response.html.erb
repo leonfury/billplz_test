@@ -1,0 +1,41 @@
+<h1>Await Payment Response</h1>
+<h3>Bill ID: <%= @payment.id %></h3>
+
+<div>
+    <i>View Order Summaries</i>
+    <p>blabla..</p>
+    <p>blabla..</p>
+    <p>blabla..</p>
+</div>
+
+
+<script>
+    function checkPaymentStatus(id) {
+        $.ajax({
+            url: `/check_payment_status/${id}`,
+            method: "POST",
+            success: function(result){
+                console.log('Check Payment Status ' + Date(Date.now()).toString());
+                console.log(result["status"]);
+
+                if (result["status"] == "success") {
+                    location.replace(`/payment_response_success/${id}`);
+                } else if (result["status"] == "failure") {
+                    location.replace(`/payment_response_fail/${id}`);
+                } else {
+                    setTimeout(() => {
+                        checkPaymentStatus(id);
+                    }, 2000);
+                }
+            },
+            error: function(error){
+                console.log('Loop fail');
+                console.log(error);
+            }
+        });
+    }
+
+    $(document).ready(() => {
+        checkPaymentStatus(<%= @payment.id %>);
+    });
+</script>

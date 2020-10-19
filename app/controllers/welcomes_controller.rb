@@ -1,23 +1,14 @@
 class WelcomesController < ApplicationController
     require 'net/http'
+    before_action :set_payment, except: [:index, :checkout_page, :make_payment]
 
-    def index
-        
+    def index        
     end
 
-    # def payment
-    #     curl https://www.billplz-sandbox.com/api/v3/bills \
-    #     -u 8a2ab22b-6bea-41ac-a132-10ad130a5712: \
-    #     -d collection_id=g3ttovrw \
-    #     -d description="Maecenas eu placerat ante." \
-    #     -d email=kliwaru@gmail.com \
-    #     -d name="Sara" \
-    #     -d amount=200 \
-    #     -d callback_url="https://localhost:3000/"
-    # end
+    def checkout_page
+    end
 
-    def payment
-        
+    def make_payment
         req = Faraday.new do |f|
             f.adapter :net_http
         end
@@ -30,10 +21,8 @@ class WelcomesController < ApplicationController
                 "name": "Leon",
                 "amount": 200,
                 "description": "TEST.",
-                "callback_url": "https://localhost:3000/payment",
-                # "reference_1_label": "Bank Code",
-                # "reference_1": "BP-FKR01",
-                # "redirect_url": "https://www.edumetry.app/",
+                "callback_url": "/await_payment_response_backend/#{@payment.id}",
+                "redirect_url": "/await_payment_response/#{@payment.id}",
             }.to_json,
             {
                 "Authorization" => "Basic #{Base64.encode64('8a2ab22b-6bea-41ac-a132-10ad130a5712:').chomp}",
@@ -44,23 +33,64 @@ class WelcomesController < ApplicationController
 
         if req.status == 200
             server_resp = JSON.parse(req.body)
-            puts server_resp["id"]
-            puts server_resp["url"]
-            byebug
-            redirect_to server_resp["url"]
+            @payment.create(billplz_id: server_resp["id"])
         else
-            puts "ERROR WALAO"
-            puts req.body
+            flash[:error] = "SOMETHING WENT WRONG!"
+            redirect_to root_path
+        end
+    end
+
+    def await_payment_response_backend
+        puts "INCOMING REQUEST"
+        puts @payment
+        puts params
+    end
+
+    def await_payment_response
+    end
+
+    def check_payment_status
+        render :json => {
+            status: @payment.payment_status
+        }
+
+        if @payment.payment_status == "success"
+            redirect_to payment_response_success_path(@payment)
+        elsif @payment.payment_status == "failure"
+            redirect_to payment_response_fail_path(@payment)
+        end
+    end
+
+    def payment_response_success
+        req = Faraday.new do |f|
+            f.adapter :net_http
         end
 
-        # puts resp.headers
-        
+        @req = req.get(
+            "https://www.billplz-sandbox.com/api/v3/bills/#{@payment.billplz_id}", 
+            {},
+            {
+                "Authorization" => "Basic #{Base64.encode64('8a2ab22b-6bea-41ac-a132-10ad130a5712:').chomp}",
+                "Content-Type" => "application/json"
+            }
+        )
+        puts @req.body
+
+        if @req.status == 200
+            @req_body = JSON.parse(@req.body)
+        else
+            flash[:error] = "SOMETHING WENT WRONG!"
+            redirect_to root_path
+        end
     end
 
-    def payment_response
-    end
+    def payment_response_fail
 
+    end
+    
+    private
+    def set_payment
+        @payment = Payment.find(params[:id])
+    end
 end
-
-# Faraday.post 'http://myhost.local/my_url', {}, authorization: 
 

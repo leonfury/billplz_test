@@ -1,3 +1,37 @@
-<h1>Welcomes</h1>
+<h1>BillPLZ Test</h1>
 
-<%= button_to "Make Payment", payment_path %>
+<%= button_to "Checkout Cart", checkout_path, method: :get %>
+
+<br><br>
+<h3>Payment Flow</h3>
+
+<p>
+    <strong>User Clicks "Checkout Cart"</strong>
+    <br>GET welcomes#checkout_page
+    <br>Controller creates new payment with order details
+    <br>User redirected to checkout page to confirm order details & make payment
+</p>
+
+<p>
+    <strong>User clicks "Make Payment"</strong>
+    <br>POST welcomes#make_payment with payment.id
+    <br>Controller makes API call via Faraday
+    <br>Passes to Billplz handling
+</p>
+
+<p>
+    <strong>User clicks "Make Payment"</strong>
+    <br>POST welcomes#make_payment with payment.id
+    <br>Controller makes API call via Faraday
+    <br>on page load, Recursive JS runs AJAX to check backend of payment status update to determine redirect
+    <br>AJAX Calls to welcomes#check_payment_status
+</p>
+
+<div class="two columns">
+    <div>
+        <strong>Payment Success</strong>
+    </div>
+    <div>
+        <strong>Payment Error</strong>
+    </div>
+</div>
